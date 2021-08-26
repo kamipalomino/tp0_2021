@@ -31,7 +31,8 @@ int crear_conexion(char *ip, char* puerto)
 	// Ahora vamos a crear el socket.
 	int socket_cliente  = socket(server_info->ai_family, server_info->ai_socktype,server_info->ai_protocol);
 	// Ahora que tenemos el socket, vamos a conectarlo
-	int retorno = connect(server_socket, server_info->ai_addr, sizeof(server_info->ai_addr));
+	if(connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen) == -1) 
+		printf("error");
 
 	freeaddrinfo(server_info);
 
@@ -70,10 +71,10 @@ t_paquete* crear_super_paquete(void)
 {
 	//me falta un malloc!
 	t_paquete* paquete;
-
+	paquete = crear_paquete();
 	//descomentar despues de arreglar
-	//paquete->codigo_operacion = PAQUETE;
-	//crear_buffer(paquete);
+	paquete->codigo_operacion = PAQUETE;
+	crear_buffer(paquete);
 	return paquete;
 }
 

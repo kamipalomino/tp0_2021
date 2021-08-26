@@ -20,10 +20,11 @@ int main(void)
 
 	// Usando el config creado previamente
 	// Lee las variables de IP, Puerto y Valor
-	//char 	 *config_get_string_value(t_config*, char *key);
+
 	ip = config_get_string_value(config, IP);
 	puerto = config_get_string_value(config, PUERTO);
 	valor = config_get_string_value(config, CLAVE);
+	
 	//Loggear valor de config
 	log_info(logger,"Valor de coniguración: %s", valor);
 	leer_consola(logger);
@@ -37,11 +38,14 @@ int main(void)
 	conexion = crear_conexion(ip, puerto);
 
 	//enviar CLAVE al servirdor
-
+	enviar_mensaje(valor,conexion);
 	paquete(conexion);
 
 	terminar_programa(conexion, logger, config);
-
+	
+	free(ip);
+	free(valor);
+	free(puerto);
 	/*---------------------------------------------------PARTE 5-------------------------------------------------------------*/
 	// Proximamente
 }
@@ -57,10 +61,6 @@ t_config* iniciar_config(void)
 {
 	t_config* nuevo_config;
 	nuevo_config= config_create("tp0.config");
-	
-	
-	
-	
 	return nuevo_config;
 }
 
@@ -73,26 +73,35 @@ void leer_consola(t_log* logger)
 	
 	while(strcmp(leido,"")!= 0){
 	// Acá la idea es que imprimas por el log lo que recibis de la consola.
-	log_info(logger,"%s",leido);
-	free(leido);
-	leido = readline(">");
+		log_info(logger,"%s",leido);
+		free(leido);
+		leido = readline(">");
 	}
+	free(leido);
 }
 
 void paquete(int conexion)
 {
 	//Ahora toca lo divertido!
-
 	char* leido;
 	t_paquete* paquete;
-
-
+	paquete = crear_paquete();
+	
+	leido = readline(">");
+	while(strcmp(leido,"")!= 0){
+		agregar_a_paquete(paquete,leido,strlen(leido)+1);
+		free(leido);
+		leido = readline(">");
+	}
+	enviar_paquete(paquete,conexion);
+	eliminar_paquete(paquete);
+	free(leido);
 }
 
 void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
 	//Y por ultimo, para cerrar, hay que liberar lo que utilizamos (conexion, log y config) con las funciones de las commons y del TP mencionadas en el enunciado
-	close(conexion);
+	liberar_conexion(conexion);
 	log_destroy(logger);
 	config_destroy(config);
 }

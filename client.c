@@ -23,7 +23,7 @@ int main(void)
 	//char 	 *config_get_string_value(t_config*, char *key);
 	ip = config_get_string_value(config, IP);
 	puerto = config_get_string_value(config, PUERTO);
-	valor = config_get_string_value(config, VALOR);
+	valor = config_get_string_value(config, CLAVE);
 	//Loggear valor de config
 	log_info(logger,"Valor de coniguración: %s", valor);
 	leer_consola(logger);

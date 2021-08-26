@@ -15,14 +15,17 @@ int main(void)
 
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
-
+	log_info(logger, "Hola! Soy un log");
 	config = iniciar_config();
 
 	// Usando el config creado previamente
 	// Lee las variables de IP, Puerto y Valor
-
+	//char 	 *config_get_string_value(t_config*, char *key);
+	ip = config_get_string_value(config, IP);
+	puerto = config_get_string_value(config, PUERTO);
+	valor = config_get_string_value(config, VALOR);
 	//Loggear valor de config
-
+	log_info(logger,"Valor de coniguración: %s", valor);
 	leer_consola(logger);
 
 
@@ -46,27 +49,34 @@ int main(void)
 t_log* iniciar_logger(void)
 {
 	t_log* nuevo_logger;
-	nuevo_logger = log_create("tp0.log","Hola! Soy un log",log_info,0);
+	nuevo_logger = log_create("tp0.log","TP0",log_info,0);
 	return nuevo_logger;
 }
 
 t_config* iniciar_config(void)
 {
 	t_config* nuevo_config;
-
+	nuevo_config= config_create("tp0.config");
+	
+	
+	
+	
 	return nuevo_config;
 }
 
 void leer_consola(t_log* logger)
 {
 	char* leido;
-
+	
 	//El primero te lo dejo de yapa
 	leido = readline(">");
-
+	
+	while(strcmp(leido,"")!= 0){
 	// Acá la idea es que imprimas por el log lo que recibis de la consola.
-
-
+	log_info(logger,"%s",leido);
+	free(1);
+	leido = readline(">");
+	}
 }
 
 void paquete(int conexion)
@@ -82,4 +92,7 @@ void paquete(int conexion)
 void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
 	//Y por ultimo, para cerrar, hay que liberar lo que utilizamos (conexion, log y config) con las funciones de las commons y del TP mencionadas en el enunciado
+	close(conexion);
+	log_destroy(logger);
+	config_destroy(config);
 }

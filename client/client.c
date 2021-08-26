@@ -74,7 +74,7 @@ void leer_consola(t_log* logger)
 	while(strcmp(leido,"")!= 0){
 	// Acá la idea es que imprimas por el log lo que recibis de la consola.
 	log_info(logger,"%s",leido);
-	free(1);
+	free(leido);
 	leido = readline(">");
 	}
 }

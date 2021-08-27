@@ -21,9 +21,9 @@ int main(void)
 	// Usando el config creado previamente
 	// Lee las variables de IP, Puerto y Valor
 
-	ip = config_get_string_value(config, IP);
-	puerto = config_get_string_value(config, PUERTO);
-	valor = config_get_string_value(config, CLAVE);
+	ip = config_get_string_value(config, "IP");
+	puerto = config_get_string_value(config, "PUERTO");
+	valor = config_get_string_value(config, "CLAVE");
 	
 	//Loggear valor de config
 	log_info(logger,"Valor de coniguración: %s", valor);

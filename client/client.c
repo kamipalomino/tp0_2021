@@ -40,12 +40,13 @@ int main(void)
 	//enviar CLAVE al servirdor
 	enviar_mensaje(valor,conexion);
 	paquete(conexion);
-
-	terminar_programa(conexion, logger, config);
+	
 	
 	free(ip);
 	free(valor);
 	free(puerto);
+	terminar_programa(conexion, logger, config);
+	
 	/*---------------------------------------------------PARTE 5-------------------------------------------------------------*/
 	// Proximamente
 }
@@ -104,4 +105,5 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 	liberar_conexion(conexion);
 	log_destroy(logger);
 	config_destroy(config);
+	printf("FIN");
 }

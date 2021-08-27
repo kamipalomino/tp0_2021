@@ -14,11 +14,22 @@ int iniciar_servidor(void)
     getaddrinfo(IP, PUERTO, &hints, &servinfo);
 
     // Creamos el socket de escucha del servidor
-
-    // Asociamos el socket a un puerto
-
+	socket_servidor = socket(servinfo->ai_family, servinfo->ai_socktype, servinfo->ai_protocol);
+	
+    if(socket_servidor < 0){
+		perror("Error al crear socket");
+		exit(EXIT_FAILURE);
+	};	
+	// Asociamos el socket a un puerto
+	if((bind(socket_servidor, servinfo->ai_addr, servinfo->ai_addrlen)) == -1){
+		perror("Error al crear socket");
+		exit(EXIT_FAILURE);
+	};	
     // Escuchamos las conexiones entrantes
-
+	if((listen(socket_servidor, SOMAXCONN))==-1){
+		perror("Error al poner a escuchar al socket");
+		exit(EXIT_FAILURE);
+	};	
     freeaddrinfo(servinfo);
 
     log_trace(logger, "Listo para escuchar a mi cliente");
@@ -32,8 +43,12 @@ int esperar_cliente(int socket_servidor)
 	int tam_direccion = sizeof(struct sockaddr_in);
 
 	// Aceptamos un nuevo cliente
-	int socket_cliente = 0;
-
+	int socket_cliente = accept(socket_servidor, (struct sockaddr *) &dir_cliente, &tam_direccion);
+	
+	if(socket_cliente < 0){
+		perror("Error al aceptar cliente");
+		exit(EXIT_FAILURE);
+	};	
 	log_info(logger, "Se conecto un cliente!");
 
 	return socket_cliente;
